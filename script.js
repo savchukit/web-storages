@@ -128,6 +128,7 @@ const renderCartItem = (product, inputNumber) => {
   quantity.type = "number";
   quantity.value = inputNumber || 1;
   quantity.min = 1;
+  quantity.className = "quantity-input";
   removeBtn.innerText = "REMOVE";
   emptyCartTitle.style.display = "none";
   cartListWrapper.style.display = "block";
@@ -162,8 +163,16 @@ const saveProduct = (product) => {
     (item) => item.id === product.id
   );
   if (productInCart > -1) {
-    product.amount++;
-    currentCartProducts.splice(productInCart, 1, product);
+    const qtyInput = document.getElementsByClassName("quantity-input");
+    if (
+      qtyInput[productInCart].value > currentCartProducts[productInCart].amount
+    ) {
+      product.amount++;
+      currentCartProducts.splice(productInCart, 1, product);
+    } else {
+      product.amount--;
+      currentCartProducts.splice(productInCart, 1, product);
+    }
   } else {
     product.amount = 1;
     currentCartProducts.push(product);
